@@ -234,6 +234,10 @@ public class RecordProcessor<Payload> implements ShardRecordProcessor {
         private final boolean delayCheckpointing;
         private final long checkpointIntervalMillis;
 
+        public static Configuration withDefaults() {
+            return builder().build();
+        }
+
         public static Builder builder() {
             return new Builder();
         }
