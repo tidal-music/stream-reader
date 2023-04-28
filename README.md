@@ -43,7 +43,7 @@ class Example {
         CloudWatchAsyncClient cloudWatchAsyncClient = CloudWatchAsyncClient.create();
 
         KinesisListener<ExampleMessage> kinesisListener = new KinesisListener<>(
-                streamName,
+                "example-kinesis-stream-name",
                 "example_kinesis_stream_listener", // This creates a similarly named table in DDB
                 InitialPositionInStream.TRIM_HORIZON,
                 new RecordProcessorFactory<>(
