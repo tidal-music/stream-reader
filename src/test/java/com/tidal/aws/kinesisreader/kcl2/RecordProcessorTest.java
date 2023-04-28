@@ -8,7 +8,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 class RecordProcessorTest {
 
     @Test
-    void builder_changes_default_values() {
+    void config_builder_changes_default_values() {
         final RecordProcessor.Configuration config = RecordProcessor.Configuration.builder()
                 .setBackoffTimeInMillis(9999)
                 .setLoggingThresholdInMillis(8888)
@@ -25,11 +25,12 @@ class RecordProcessorTest {
     }
 
     @Test
-    void builder_requires_non_negative_checkpoint_interval() {
+    void config_builder_requires_non_negative_checkpoint_interval() {
         assertThatThrownBy(() -> RecordProcessor.Configuration.builder()
                 .setDelayCheckpointing(true)
                 .setCheckpointIntervalMillis(-1)
                 .build()
         ).isInstanceOf(IllegalArgumentException.class);
     }
+
 }
