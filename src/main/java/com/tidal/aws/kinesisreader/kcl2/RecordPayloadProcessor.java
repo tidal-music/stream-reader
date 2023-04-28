@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.tidal.awskinesisreaderv2;
+package com.tidal.aws.kinesisreader.kcl2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
