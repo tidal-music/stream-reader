@@ -4,7 +4,7 @@ This is a KCL 2.x kinesis data stream reader (based on AWS SDK v2).
 
 ## Requirements
 
-* Access to create a [https://docs.aws.amazon.com/streams/latest/dev/shared-throughput-kcl-consumers.html#shared-throughput-kcl-consumers-leasetable](lease table) created by KCL 2.x.
+* Access to create a [lease table](https://docs.aws.amazon.com/streams/latest/dev/shared-throughput-kcl-consumers.html#shared-throughput-kcl-consumers-leasetable) created by KCL 2.x.
 * Read access to the kinesis stream you listen to
 
 ## Usage
