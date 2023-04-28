@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.tidal.awskinesisreaderv2;
+package com.tidal.aws.kinesisreader.kcl2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-@Slf4j
 public class JsonDeserializer {
+
+    private static final Logger log = LoggerFactory.getLogger(JsonDeserializer.class);
 
     private final ObjectMapper objectMapper;
 
