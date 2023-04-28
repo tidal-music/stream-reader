@@ -228,11 +228,15 @@ public class RecordProcessor<Payload> implements ShardRecordProcessor {
 
     public static class Configuration {
 
-        private long backoffTimeInMillis = 1000L;
-        private long loggingThresholdInMillis = 5000L;
-        private int numberOfRetries = 3;
-        private boolean delayCheckpointing = false;
-        private long checkpointIntervalMillis = -1L;
+        private final long backoffTimeInMillis;
+        private final long loggingThresholdInMillis;
+        private final int numberOfRetries;
+        private final boolean delayCheckpointing;
+        private final long checkpointIntervalMillis;
+
+        public static Builder builder() {
+            return new Builder();
+        }
 
         public long getBackoffTimeInMillis() {
             return backoffTimeInMillis;
@@ -266,33 +270,42 @@ public class RecordProcessor<Payload> implements ShardRecordProcessor {
             }
         }
 
-        public Configuration setBackoffTimeInMillis(long backoffTimeInMillis) {
-            this.backoffTimeInMillis = backoffTimeInMillis;
-            return this;
-        }
+        public static class Builder {
+            private long backoffTimeInMillis = 1000L;
+            private long loggingThresholdInMillis = 5000L;
+            private int numberOfRetries = 3;
+            private boolean delayCheckpointing = false;
+            private long checkpointIntervalMillis = -1L;
 
-        public Configuration setLoggingThresholdInMillis(long loggingThresholdInMillis) {
-            this.loggingThresholdInMillis = loggingThresholdInMillis;
-            return this;
-        }
 
-        public Configuration setNumberOfRetries(int numberOfRetries) {
-            this.numberOfRetries = numberOfRetries;
-            return this;
-        }
+            public Builder setBackoffTimeInMillis(long backoffTimeInMillis) {
+                this.backoffTimeInMillis = backoffTimeInMillis;
+                return this;
+            }
 
-        public Configuration setDelayCheckpointing(boolean delayCheckpointing) {
-            this.delayCheckpointing = delayCheckpointing;
-            return this;
-        }
+            public Builder setLoggingThresholdInMillis(long loggingThresholdInMillis) {
+                this.loggingThresholdInMillis = loggingThresholdInMillis;
+                return this;
+            }
 
-        public Configuration setCheckpointIntervalMillis(long checkpointIntervalMillis) {
-            this.checkpointIntervalMillis = checkpointIntervalMillis;
-            return this;
-        }
+            public Builder setNumberOfRetries(int numberOfRetries) {
+                this.numberOfRetries = numberOfRetries;
+                return this;
+            }
 
-        public Configuration build() {
-            return new Configuration(backoffTimeInMillis, loggingThresholdInMillis, numberOfRetries, delayCheckpointing, checkpointIntervalMillis);
+            public Builder setDelayCheckpointing(boolean delayCheckpointing) {
+                this.delayCheckpointing = delayCheckpointing;
+                return this;
+            }
+
+            public Builder setCheckpointIntervalMillis(long checkpointIntervalMillis) {
+                this.checkpointIntervalMillis = checkpointIntervalMillis;
+                return this;
+            }
+
+            public Configuration build() {
+                return new Configuration(backoffTimeInMillis, loggingThresholdInMillis, numberOfRetries, delayCheckpointing, checkpointIntervalMillis);
+            }
         }
     }
 }
