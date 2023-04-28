@@ -14,15 +14,18 @@
 
 package com.tidal.aws.kinesisreader.kcl2;
 
-import lombok.AllArgsConstructor;
 import software.amazon.kinesis.processor.ShardRecordProcessor;
 import software.amazon.kinesis.processor.ShardRecordProcessorFactory;
 
-@AllArgsConstructor
 public class RecordProcessorFactory<Payload> implements ShardRecordProcessorFactory {
 
     private final RecordPayloadProcessor<Payload> payloadProcessor;
     private final RecordProcessor.Configuration configuration;
+
+    public RecordProcessorFactory(RecordPayloadProcessor<Payload> payloadProcessor, RecordProcessor.Configuration configuration) {
+        this.payloadProcessor = payloadProcessor;
+        this.configuration = configuration;
+    }
 
     public ShardRecordProcessor shardRecordProcessor() {
         return new RecordProcessor<>(configuration, payloadProcessor);

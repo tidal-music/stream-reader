@@ -14,10 +14,8 @@
 
 package com.tidal.aws.kinesisreader.kcl2;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import software.amazon.kinesis.exceptions.InvalidStateException;
 import software.amazon.kinesis.exceptions.ShutdownException;
 import software.amazon.kinesis.exceptions.ThrottlingException;
@@ -33,8 +31,9 @@ import java.util.List;
  * The implementation of the ShardRecordProcessor interface is where the heart of the record processing logic lives.
  * In this example all we do to 'process' is log info about the records.
  */
-@Slf4j
 public class RecordProcessor<Payload> implements ShardRecordProcessor {
+
+    private static final Logger log = LoggerFactory.getLogger(RecordProcessor.class);
 
     private final Configuration configuration;
     private final RecordPayloadProcessor<Payload> payloadProcessor;
@@ -157,7 +156,8 @@ public class RecordProcessor<Payload> implements ShardRecordProcessor {
         return false;
     }
 
-    /** Called when the lease tied to this record processor has been lost. Once the lease has been lost,
+    /**
+     * Called when the lease tied to this record processor has been lost. Once the lease has been lost,
      * the record processor can no longer checkpoint.
      *
      * @param leaseLostInput Provides access to functions and data related to the loss of the lease.
@@ -226,27 +226,33 @@ public class RecordProcessor<Payload> implements ShardRecordProcessor {
         }
     }
 
-
-
-    @Getter
-    @Builder
-    @NoArgsConstructor(staticName = "withDefaults")
     public static class Configuration {
-        // Defaults
-        static final long BACKOFF_TIME_IN_MILLIS = 1000L;
-        static final int NUM_RETRIES = 3;
-        static final long LOGGING_THRESHOLD_IN_MILLIS = 5000L;
 
-        @Builder.Default
-        private long backoffTimeInMillis = BACKOFF_TIME_IN_MILLIS;
-        @Builder.Default
-        private long loggingThresholdInMillis = LOGGING_THRESHOLD_IN_MILLIS;
-        @Builder.Default
-        private int numberOfRetries = NUM_RETRIES;
-        @Builder.Default
+        private long backoffTimeInMillis = 1000L;
+        private long loggingThresholdInMillis = 5000L;
+        private int numberOfRetries = 3;
         private boolean delayCheckpointing = false;
-        @Builder.Default
-        private long checkpointIntervalMillis = -1L; // Not used since its disabled by default
+        private long checkpointIntervalMillis = -1L;
+
+        public long getBackoffTimeInMillis() {
+            return backoffTimeInMillis;
+        }
+
+        public long getLoggingThresholdInMillis() {
+            return loggingThresholdInMillis;
+        }
+
+        public int getNumberOfRetries() {
+            return numberOfRetries;
+        }
+
+        public boolean isDelayCheckpointing() {
+            return delayCheckpointing;
+        }
+
+        public long getCheckpointIntervalMillis() {
+            return checkpointIntervalMillis;
+        }
 
         private Configuration(long backoffTimeInMillis, long loggingThresholdInMillis, int numberOfRetries, boolean delayCheckpointing, long checkpointIntervalMillis) {
             this.backoffTimeInMillis = backoffTimeInMillis;
@@ -258,6 +264,35 @@ public class RecordProcessor<Payload> implements ShardRecordProcessor {
             if (delayCheckpointing && checkpointIntervalMillis < 1) {
                 throw new IllegalArgumentException("When delayCheckpointing is set the interval needs also to be set");
             }
+        }
+
+        public Configuration setBackoffTimeInMillis(long backoffTimeInMillis) {
+            this.backoffTimeInMillis = backoffTimeInMillis;
+            return this;
+        }
+
+        public Configuration setLoggingThresholdInMillis(long loggingThresholdInMillis) {
+            this.loggingThresholdInMillis = loggingThresholdInMillis;
+            return this;
+        }
+
+        public Configuration setNumberOfRetries(int numberOfRetries) {
+            this.numberOfRetries = numberOfRetries;
+            return this;
+        }
+
+        public Configuration setDelayCheckpointing(boolean delayCheckpointing) {
+            this.delayCheckpointing = delayCheckpointing;
+            return this;
+        }
+
+        public Configuration setCheckpointIntervalMillis(long checkpointIntervalMillis) {
+            this.checkpointIntervalMillis = checkpointIntervalMillis;
+            return this;
+        }
+
+        public Configuration build() {
+            return new Configuration(backoffTimeInMillis, loggingThresholdInMillis, numberOfRetries, delayCheckpointing, checkpointIntervalMillis);
         }
     }
 }

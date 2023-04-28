@@ -14,7 +14,8 @@
 
 package com.tidal.aws.kinesisreader.kcl2;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
@@ -29,8 +30,9 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-@Slf4j
 public class KinesisListener<Payload> {
+
+    private static final Logger log = LoggerFactory.getLogger(KinesisListener.class);
 
     private final Scheduler scheduler;
 
@@ -75,12 +77,11 @@ public class KinesisListener<Payload> {
         log.info("Started kinesis listener");
     }
 
-
+    /**
+     * Stops consuming data. Finishes processing the current batch of data already received from Kinesis
+     * before shutting down.
+     */
     public void shutdown() {
-        /**
-         * Stops consuming data. Finishes processing the current batch of data already received from Kinesis
-         * before shutting down.
-         */
         Future<Boolean> gracefulShutdownFuture = scheduler.startGracefulShutdown();
         log.info("Waiting up to 20 seconds for shutdown to complete.");
         try {
